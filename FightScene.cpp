@@ -2,6 +2,7 @@
 #include "tools/GameUtils.h"
 #include "SceneRule.h"
 #include "UserData.h"
+#include "FightUI.h"
 
 FightScene::FightScene()
 {
@@ -55,7 +56,7 @@ void FightScene::initMap()
 }
 void FightScene::initUI()
 {
-
+	addChild(FightUI::create());
 }
 void FightScene::initRole()
 {
