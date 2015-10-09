@@ -41,4 +41,10 @@ private:
 	EventListenerCustom* listener;
 //测试按钮
 	void testCallBack(Ref* senderz,Control::EventType controlEvent);
+
+	////用UserDefault代替数据库存档
+	////判断是否有存档
+	//bool isHaveSaveFile();
+	////读取存档
+	//void readArchive();
 };

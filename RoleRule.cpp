@@ -173,8 +173,8 @@ vector<int> RoleRule::getFreeRolesVector()
 	for (const auto& key : INSTANCE(BaseDataManager)->getXml(RoleXml))
 	{
 		//挑选出vip和cost为0的角色id
-		int vip = getRoleVip(Value(key.first).asInt);
-		int goldCost = getRoleVip(Value(key.first).asInt);
+		int vip = getRoleVip(Value(key.first).asInt());
+		int goldCost = getRoleVip(Value(key.first).asInt());
 		if (vip == 0 && goldCost == 0)
 		{
 			result.push_back(Value(key.first).asInt());
