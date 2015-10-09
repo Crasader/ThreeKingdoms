@@ -31,8 +31,8 @@ public:
     ////获取模型攻击范围
     //CCSize getModelAttackSize(int modelId);
 
-    ////获取技能被击特效图片名
-    //string getSkillHitFrameName(int skillId,bool containPng = false);
+    //获取技能被击特效图片名
+    string getSkillHitFrameName(int skillId,bool containPng = false);
     ////获取技能被击特效锚点
     //CCPoint getSkillHitAnchorPoint(int skillId);
     

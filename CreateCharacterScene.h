@@ -26,6 +26,7 @@ private:
 
 	void initContent();
 	void startGame(Ref* senderz,Control::EventType controlEvent);
+
 	void unSelectAll();
 	void initBg();
 
@@ -38,4 +39,6 @@ private:
 	Sprite* bg2;
 	
 	EventListenerCustom* listener;
+//≤‚ ‘∞¥≈•
+	void testCallBack(Ref* senderz,Control::EventType controlEvent);
 };

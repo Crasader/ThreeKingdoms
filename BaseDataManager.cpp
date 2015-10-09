@@ -38,6 +38,13 @@ void BaseDataManager::removeAllXml()
 
 ValueMap BaseDataManager::getXml(const string& xmlPath)
 {
+	//xmlDic是以xmlPath为key的map
+	if (xmlDic.find(xmlPath) != xmlDic.end())
+	{
+		return xmlDic[xmlPath].asValueMap();
+	}
+
+//	log("xmlname:%s",xmlPath.c_str());
 	string path("xml/");
 	tinyxml2::XMLDocument* pDoc = new tinyxml2::XMLDocument();
 	tinyxml2::XMLError errorid = pDoc->LoadFile((path + xmlPath).c_str());
@@ -51,9 +58,11 @@ ValueMap BaseDataManager::getXml(const string& xmlPath)
 	tinyxml2::XMLElement* dataEle = rootEle->FirstChildElement();//data节点
 	tinyxml2::XMLElement* nextDataEle = dataEle->ToElement();
 
-	//log("%s",nextDataEle->Value());
+	ValueMap dic;
 	while (nextDataEle)
 	{
+	//log("*******************************************");
+	//log("%s",nextDataEle->Value());
 		tinyxml2::XMLElement* roldId = nextDataEle->FirstChildElement();//roldId节点
 		const tinyxml2::XMLAttribute* roldIdAtt = roldId->FirstAttribute();//roldId的第一个属性
 		tinyxml2::XMLElement* nextEle = roldId->ToElement();
@@ -65,14 +74,15 @@ ValueMap BaseDataManager::getXml(const string& xmlPath)
 			string val = nextEle->FirstChild()->Value();
 			subDic[key] = val;
 			nextEle = nextEle->NextSiblingElement();
-	//		log("%s,%s",key.c_str(),val.c_str());
+		//	log("%s,%s",key.c_str(),val.c_str());
 		}
-		xmlDic[id] = subDic;
+		dic[id] = subDic;
 		nextDataEle = nextDataEle->NextSiblingElement();
 	}
+	xmlDic[xmlPath] = dic;
 	delete pDoc;
 	
-   return xmlDic;
+	return dic;
 }
 
 string BaseDataManager::getLan(string param)

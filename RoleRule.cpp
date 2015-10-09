@@ -46,6 +46,10 @@ vector<int> RoleRule::getAllRoleId()
 	{
 		result.push_back(Value(key.first).asInt());
 	}
+	for (auto& i : result)
+	{
+		log("roleXml:%d",i);
+	}
 	return result;
 }
 
@@ -59,4 +63,16 @@ Vec2 RoleRule::getRoleAnchorPoint(int roleId)
 string RoleRule::getRoleName(int roleId)
 {
 	return INSTANCE(BaseDataManager)->getLan(getRoleAttribute(roleId,"name"));
+}
+
+//获取角色图片资源路径
+string RoleRule::getRoleImgPath(int roleId)
+{
+	return INSTANCE(ModelRule)->getModelPath(getRoleModelId(roleId));
+}
+
+//获取角色技能id
+int RoleRule::getRoleSkillId(int roleId)
+{
+	return Value(getRoleAttribute(roleId,"skillId")).asInt();
 }

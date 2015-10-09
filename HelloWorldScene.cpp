@@ -3,6 +3,7 @@
 #include "tools/ButtonUtils.h"
 #include "tools/GameUtils.h"
 #include "AnimateManager.h"
+#include "CreateCharacterScene.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -189,7 +190,8 @@ bool HelloWorld::init()
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
-    Director::getInstance()->end();
+    //Director::getInstance()->end();
+	Director::getInstance()->replaceScene(CreateCharacterScene::createScene());
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);

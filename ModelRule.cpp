@@ -64,6 +64,18 @@ string ModelRule::getModelFrameNameByModelId(int modelId,RoleStatus status,bool 
     }
 }
 
+//获取技能被击特效图片名
+string ModelRule::getSkillHitFrameName(int skillId,bool containPng)
+{
+	string result = Value(skillId).asString();
+	result += "_skill_hit";
+	if (containPng)
+	{
+		result += ".png";
+	}
+	return result;
+}
+
 string ModelRule::getModelFirstFrameNameByModelId(int modelId,RoleStatus status)
 {
     string result = getModelFrameNameByModelId(modelId,status);

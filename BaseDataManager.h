@@ -40,12 +40,13 @@ public:
     string getLan(string param);
     
     void removeAllXml();
+
+	vector<string> split(string str,string pattern);
 private:
     ValueMap xmlDic;
     ValueMap lanDic;
     
     void loadLan();
 
-	vector<string> split(string str,string pattern);
 };
 

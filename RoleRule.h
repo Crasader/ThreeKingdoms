@@ -48,6 +48,10 @@ public:
 	Vec2 getRoleAnchorPoint(int roleId);
 	//获取角色名
 	string getRoleName(int roleId);
+	//获取角色图片资源路径
+	string getRoleImgPath(int roleId);
+	//获取角色技能id
+	int getRoleSkillId(int roleId);
 public:
 
 	vector<int> getAllRoleId();

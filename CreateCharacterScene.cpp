@@ -96,6 +96,11 @@ void CreateCharacterScene::initContent()
 		characterArray.pushBack(sc);
 	}
 
+	//²âÊÔ°´Å¥
+	ControlButton* testBtn = INSTANCE(ButtonUtils)->createButton("createCharacter_buyBtn_1.png","createCharacter_buyBtn_2.png","createCharacter_buyBtn_2.png",Size(226,87),"Test",40,Color3B::BLACK);
+	addChild(testBtn);
+	testBtn->setPosition(Vec2(70,70));
+	testBtn->addTargetWithActionForControlEvents(this,cccontrol_selector(CreateCharacterScene::testCallBack),Control::EventType::TOUCH_UP_INSIDE);
 }
 void CreateCharacterScene::startGame(Ref* senderz,Control::EventType controlEvent)
 {
@@ -152,4 +157,9 @@ void CreateCharacterScene::update(float dt)
 			bg2->setPositionX(bg1->getPositionX() - bg1->getContentSize().width);
 		}
 	}
+}
+
+void CreateCharacterScene::testCallBack(Ref* senderz,Control::EventType controlEvent)
+{
+	Director::getInstance()->replaceScene(HelloWorld::createScene());
 }
