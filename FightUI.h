@@ -15,6 +15,11 @@ public:
 	virtual bool init();
 private:
 	CommonTitleBar* titleBar;
+	Sprite* potSprite;
+
+	int currentMoney;
+	int currentIntegral;
+	int currentUpgradeIntegral;
 private:
 	void initContent();
 };

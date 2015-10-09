@@ -15,6 +15,11 @@ public:
 	virtual bool init();
 private:
 	int roleId;
+	float speedX;
+	float speedY;
+	float attackSpeed;
+	//速度系数
+	float speedCoefficient;
 
 	RoleStatus currentRoleStatus;
 	RoleDirection currentRoleDirection;
@@ -22,4 +27,8 @@ private:
 	Sprite* role;
 private:
 	void initRole();
+
+	void playStand();
+
+	Animate* getAnimate(RoleStatus status,float duration = 0.1f);
 };
