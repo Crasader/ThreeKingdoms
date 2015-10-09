@@ -1,5 +1,6 @@
 #include "ModelRule.h"
 #include "BaseDataManager.h"
+#include "SkillRule.h"
 
 bool ModelRule::init()
 {
@@ -111,4 +112,49 @@ string ModelRule::getModelPath(int modelId)
 	string result("model/");
 	result += Value(modelId).asString();
 	return result+"/";
+}
+
+//获取模型技能特效锚点
+Vec2 ModelRule::getModelSkillEffectAnchorPoint(int modelId)
+{
+	float _x = Value(getModelAttribute(modelId,"skillpointX")).asFloat();
+	float _y = Value(getModelAttribute(modelId,"skillpointY")).asFloat();
+	return Vec2(_x,_y);
+}
+
+//获取模型普攻特效锚点
+Vec2 ModelRule::getModelAttackEffectAnchorPoint(int modelId)
+{
+	float _x = Value(getModelAttribute(modelId,"attackpointX")).asFloat();
+	float _y = Value(getModelAttribute(modelId,"attackpointY")).asFloat();
+	return Vec2(_x,_y);
+}
+
+//获取模型受击范围
+Size ModelRule::getModelHurtSize(int modelId)
+{
+	string temp = getModelAttribute(modelId,"size");
+	if (temp == "0")
+	{
+		return Size::ZERO;
+	}
+	vector<string> size = INSTANCE(BaseDataManager)->split(temp,"_");
+	return Size(Value(size[0]).asFloat(),Value(size[1]).asFloat());
+}
+//获取模型攻击范围
+Size ModelRule::getModelAttackSize(int modelId)
+{
+	string temp = getModelAttribute(modelId,"AttackSize");
+	if (temp == "0")
+	{
+		return Size::ZERO;
+	}
+	vector<string> size = INSTANCE(BaseDataManager)->split(temp,"_");
+	return Size(Value(size[0]).asFloat(),Value(size[1]).asFloat());
+}
+
+//获取技能被击特效锚点
+Vec2 ModelRule::getSkillHitAnchorPoint(int skillId)
+{
+	return INSTANCE(SkillRule)->getSkillHitAnchorPoint(skillId);
 }

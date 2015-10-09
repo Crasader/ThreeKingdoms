@@ -22,19 +22,19 @@ public:
     string getModelPath(int modelId);
     //获取模型锚点
     Vec2 getModelAnchorPoint(int modelId);
-    ////获取模型技能特效锚点
-    //CCPoint getModelSkillEffectAnchorPoint(int modelId);
-    ////获取模型普攻特效锚点
-    //CCPoint getModelAttackEffectAnchorPoint(int modelId);
-    ////获取模型受击范围
-    //CCSize getModelHurtSize(int modelId);
-    ////获取模型攻击范围
-    //CCSize getModelAttackSize(int modelId);
+    //获取模型技能特效锚点
+    Vec2 getModelSkillEffectAnchorPoint(int modelId);
+    //获取模型普攻特效锚点
+    Vec2 getModelAttackEffectAnchorPoint(int modelId);
+    //获取模型受击范围
+    Size getModelHurtSize(int modelId);
+    //获取模型攻击范围
+    Size getModelAttackSize(int modelId);
 
     //获取技能被击特效图片名
     string getSkillHitFrameName(int skillId,bool containPng = false);
-    ////获取技能被击特效锚点
-    //CCPoint getSkillHitAnchorPoint(int skillId);
+    //获取技能被击特效锚点
+    Vec2 getSkillHitAnchorPoint(int skillId);
     
 private:
     ValueMap getModelDic(int modelId);

@@ -15,5 +15,7 @@ public:
 	CC_SYNTHESIZE(int,currentRoleId,CurrentRoleId);
 	//当前场景id
 	CC_SYNTHESIZE(int,currentSceneId,CurrentSceneId);
+	//拥有的角色Id
+	CC_SYNTHESIZE(int,roles,Roles);
 
 };
