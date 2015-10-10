@@ -1,0 +1,7 @@
+1.我们在Windows下使用Visual Studio 2012开发游戏的时候，使用标签中包含中文时候会出现乱码或无法显示!
+
+出现乱码或无法显示的原因是由于在Windows中文环境下使用Visual Studio创建的源程序文件是采用GBK编码。
+解决方法很简单，我们只需要把HelloWorldScene.cpp文件另存为UTF-8就可以了，用记事本等文本编辑工具打然后另存为UTF-8就可以，
+或者是在Visual Studio工具中可以选择菜单文件→高级保存选项，在弹出如下图所示对话框，选择编码为Unicode(UTF-8无签名)，然后点击确定按钮保存。
+
+注意不能保存为Unicode(UTF-8带签名)。

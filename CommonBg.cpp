@@ -100,11 +100,12 @@ void CommonBg::initContent()
 	addChild(titleBg);
 	titleBg->setPosition(Vec2(40,240));
 
-	//显示不了中文，莫名其妙！！！
-	//auto title = Label::createWithBMFont("font_uiTitle.fnt",this->title);
+	//鏄剧ず涓嶄簡涓枃锛岃帿鍚嶅叾濡欙紒锛侊紒
+	//闇�瑕佽浆鎹㈡垚utf-8鏍煎紡
+	auto title = Label::createWithBMFont("font/font_uiTitle.fnt",this->title);
     //auto title = Label::createWithTTF("hello world", "fonts/Marker Felt.ttf", 24);
-	//auto title = Label::createWithBMFont("fonts/bitmapFontChinese.fnt", "中国");
-	auto title = Label::createWithBMFont("fonts/futura-48.fnt", "Chapter");
+	//auto title = Label::createWithBMFont("fonts/bitmapFontChinese.fnt", "涓浗.");
+	//auto title = Label::createWithBMFont("fonts/futura-48.fnt", "Chapter");
 	addChild(title);
 	title->setPosition(Vec2(0,240));
 	title->setColor(Color3B::RED);

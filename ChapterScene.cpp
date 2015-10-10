@@ -50,7 +50,7 @@ bool ChapterScene::init()
 void ChapterScene::initContent()
 {
 	auto winSize = Director::getInstance()->getWinSize();
-	addChild(CommonBg::create("¹Ø¿¨Ñ¡Ôñ"));
+	addChild(CommonBg::create("å…³å¡é€‰æ‹©"));
 	setPosition(INSTANCE(GameUtils)->getWindowsCenterPosition());
 
 	auto backBtn = INSTANCE(ButtonUtils)->createButton("common_backBtn.png",Size(75,81),"");
@@ -90,8 +90,8 @@ void ChapterScene::initScrollView()
 	auto winSize = Director::getInstance()->getWinSize();
 	layer = Layer::create();
 	scrollView = ScrollView::create();
-	//1.±ØÐëÒª¼Ì³ÐScrollViewDelegate
-	//2.ÒªÏëÖ´ÐÐscrollViewDidScroll±ØÐëÖ´ÐÐÕâÒ»¾ä
+	//1.å¿…é¡»è¦ç»§æ‰¿ScrollViewDelegate
+	//2.è¦æƒ³æ‰§è¡ŒscrollViewDidScrollå¿…é¡»æ‰§è¡Œè¿™ä¸€å¥
 	scrollView->setDelegate(this);
 
 	scrollView->setContainer(layer);
@@ -214,6 +214,6 @@ void ChapterScene::startGame(Ref* senderz,Control::EventType controlEvent)
 	log("%d",curSceneId);
 	INSTANCE(UserData)->setCurrentSceneId(curSceneId);
 
-	//½øÈëÓÎÏ·¼ÓÔØ³¡¾°
+	//è¿›å…¥æ¸¸æˆåŠ è½½åœºæ™¯
 	Director::getInstance()->replaceScene(LoadingScene::createScene());
 }

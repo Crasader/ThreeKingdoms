@@ -13,6 +13,10 @@ public:
 	BaseRole(int roleId);
 	~BaseRole();
 	virtual bool init();
+
+	//处理虚拟摇杆自定义消息
+	virtual void onEnter();
+	virtual void onExit();
 private:
 	int roleId;
 	float speedX;
@@ -25,10 +29,19 @@ private:
 	RoleDirection currentRoleDirection;
 
 	Sprite* role;
+	EventListenerCustom* listener;
 private:
 	void initRole();
 
 	void playStand();
+	void playRun();
+	void playSkill();
+	void playAttack();
+	void skillComplete();
 
 	Animate* getAnimate(RoleStatus status,float duration = 0.1f);
+
+	void joyStickHandler(string direction);
+	void setRolePosition(Vec2 p);
+	bool isAttacking();
 };
