@@ -4,6 +4,7 @@
 bool UserData::init()
 {
 	reloadData();
+	role = nullptr;
 	return true;
 }
 

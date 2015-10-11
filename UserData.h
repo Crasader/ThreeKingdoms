@@ -2,6 +2,7 @@
 
 #include "cocos2d.h"
 #include "tools/GameCommon.h"
+#include "BaseRole.h"
 
 USING_NS_CC;
 using namespace std;
@@ -98,6 +99,8 @@ public:
 	CC_SYNTHESIZE(int,currentRoleId,CurrentRoleId);
 	//当前场景id
 	CC_SYNTHESIZE(int,currentSceneId,CurrentSceneId);
+	//当前角色
+	CC_SYNTHESIZE(BaseRole*, role,Role);
 private:
 	//拥有的角色Id
 	string roles;

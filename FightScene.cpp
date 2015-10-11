@@ -63,4 +63,6 @@ void FightScene::initRole()
 	role = BaseRole::create(INSTANCE(UserData)->getCurrentRoleId());
 	role->setPosition(Vec2(0,-170));
 	mapNode->addChild(role);
+	
+	INSTANCE(UserData)->setRole(role);
 }

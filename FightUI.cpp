@@ -44,6 +44,7 @@ void FightUI::initContent()
 	potSprite->setPosition(Vec2(340 - winSize.width/2, winSize.height/2 - 60));
 
 
+	//–Èƒ‚“°∏À
 	JoyStickLayer* joyStickLayer = JoyStickLayer::create();
 	addChild(joyStickLayer);
 }

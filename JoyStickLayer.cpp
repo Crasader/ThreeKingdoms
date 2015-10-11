@@ -1,5 +1,6 @@
 #include "JoyStickLayer.h"
 #include "TipsManager.h"
+#include "FightManager.h"
 
 bool JoyStickLayer::init()
 {
@@ -93,6 +94,30 @@ void JoyStickLayer::skillTips()
 
 void JoyStickLayer::update(float dt)
 {
+	//根据怒气值设置按钮状态和百分比
+	if (INSTANCE(FightManager)->enoughAnger())
+	{
+		skillBtn->setEnabled(true);
+		skillPro->setPercentage(100.0f);
+	}
+	else
+	{
+		//skillBtn->setEnabled(false);
+		skillBtn->setEnabled(true);
+		skillPro->setPercentage(INSTANCE(FightManager)->getAnger() * 100.0f);
+	}
+
+	//攻击键
+	if (attackBtn->isHighlighted())
+	{
+		_eventDispatcher->dispatchCustomEvent(JoyStick_status,JoyStick_attack);
+	}
+	//技能键
+	if (skillBtn->isHighlighted())
+	{
+		_eventDispatcher->dispatchCustomEvent(JoyStick_status,JoyStick_skill);
+	}
+
 	//虚拟摇杆根据位置发送消息
 	Vec2 poi = joystick->getVelocity() * 50;
 	if (poi.x == 0 && poi.y == 0)

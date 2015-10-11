@@ -1,6 +1,8 @@
 #include "BaseRole.h"
 #include "tools/AnimationUtils.h"
 #include "JoyStickLayer.h"
+#include "SkillRule.h"
+#include "FightManager.h"
 
 BaseRole* BaseRole::create(int roleId)
 {
@@ -26,6 +28,7 @@ BaseRole::BaseRole(int roleId)
 	speedY = speedX * 2 / 3;
 	attackSpeed = INSTANCE(RoleRule)->getRoleAttackSpeed(roleId) * 1.0f;
 	speedCoefficient = 0.6f;
+	attackCompleted = true;
 }
 
 BaseRole::~BaseRole()
@@ -105,6 +108,8 @@ bool BaseRole::init()
 	{
 		return false;
 	}
+	//evenStrokes = INSTANCE(TitleRule);
+	evenStrokes = 5;
 	initRole();
 	return true;
 }
@@ -179,6 +184,11 @@ void BaseRole::playSkill()
 	//Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(BaseRole::startSkill),this,1.0f,false);
 }
 
+void BaseRole::startSkill(float dt)
+{
+	//INSTANCE(FightManager)->roleSkill();
+}
+
 void BaseRole::skillComplete()
 {
 	playStand();
@@ -186,9 +196,129 @@ void BaseRole::skillComplete()
 
 void BaseRole::playAttack()
 {
+	RoleStatus status = currentRoleStatus;
+	//evenStrokes = INSTANCE(FightManager)->getEvenStrokes();
+	evenStrokes = 5;
 
+	if (currentRoleStatus == RoleStatusSkill)
+	{
+		return;
+	}
+
+	if (isAttacking())
+	{
+		if (attackCompleted)
+		{
+			if (currentRoleStatus == RoleStatusAttack_1)
+			{
+				currentRoleStatus = RoleStatusAttack_2;
+			}
+			else if (currentRoleStatus == RoleStatusAttack_2)
+			{
+				currentRoleStatus = RoleStatusAttack_3;
+			}
+			else if (currentRoleStatus == RoleStatusAttack_3)
+			{
+				currentRoleStatus = RoleStatusAttack_4;
+			}
+			else if (currentRoleStatus == RoleStatusAttack_4)
+			{
+				currentRoleStatus = RoleStatusAttack_5;
+			}
+			else if (currentRoleStatus == RoleStatusAttack_5)
+			{
+				return;
+			}
+		}
+		else
+		{
+			return;
+		}
+	}
+	else
+	{
+		currentRoleStatus = RoleStatusAttack_1;
+	}
+
+	INSTANCE(FightManager)->setAttackMultiple(getAttackMultiple());
+	
+	attackCompleted = false;
+	role->stopAllActions();
+
+	auto animate = getAnimate(currentRoleStatus, attackSpeed);
+	auto action = Sequence::create(animate,CallFuncN::create(CC_CALLBACK_0(BaseRole::attackComplete,this)),nullptr);
+	role->runAction(action);
+
+	Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(BaseRole::startAttack),this,animate->getDuration()/2.0f,false);
+	Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(BaseRole::allowNextAttack),this,animate->getDuration() - 0.1f,false);
 }
 
+void BaseRole::startAttack(float dt)
+{
+	//播放音效
+	//取消定时器
+	this->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(BaseRole::startAttack),this);
+	//角色攻击后的一些效果，敌人受伤，加金币等
+	INSTANCE(FightManager)->roleAttack(getAttackMultiple());
+}
+void BaseRole::allowNextAttack(float dt)
+{
+	this->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(BaseRole::allowNextAttack),this);
+	if (evenStrokes == 1 && currentRoleStatus == RoleStatusAttack_1)
+	{
+		attackCompleted = false;
+	}
+	else if (evenStrokes == 2 && currentRoleStatus == RoleStatusAttack_2)
+	{
+		attackCompleted = false;
+	}
+	else if (evenStrokes == 3 && currentRoleStatus == RoleStatusAttack_3)
+	{
+		attackCompleted = false;
+	}
+	else if (evenStrokes == 4 && currentRoleStatus == RoleStatusAttack_4)
+	{
+		attackCompleted = false;
+	}
+	else if (evenStrokes == 5 && currentRoleStatus == RoleStatusAttack_5)
+	{
+		attackCompleted = false;
+	}
+	else
+	{
+		attackCompleted = true;
+	}
+}
+
+int BaseRole::getAttackMultiple()
+{
+	switch (currentRoleStatus)
+	{
+	case RoleStatusAttack_1:
+		return 1;
+		break;
+	case RoleStatusAttack_2:
+		return 2;
+		break;
+	case RoleStatusAttack_3:
+		return 3;
+		break;
+	case RoleStatusAttack_4:
+		return 4;
+		break;
+	case RoleStatusAttack_5:
+		return 5;
+		break;
+	default:
+		return 0;
+		break;
+	}
+}
+
+void BaseRole::attackComplete()
+{
+	playStand();
+}
 
 Animate* BaseRole::getAnimate(RoleStatus status,float duration)
 {
@@ -260,3 +390,35 @@ void BaseRole::setRolePosition(Vec2 p)
 	playRun();
 }
 
+//roleid-->skillId-->skillCost
+int BaseRole::getSkillCost()
+{
+	return INSTANCE(SkillRule)->getSkillCost(INSTANCE(RoleRule)->getRoleSkillId(roleId));
+}
+
+//获取角色方向
+RoleDirection BaseRole::getRoleDirection()
+{
+	return currentRoleDirection;
+}
+
+//获取角色攻击区域和受伤区域
+Rect BaseRole::getAttackRect()
+{
+	//根据人物位置，和区域大小确定攻击区域位置
+	auto size = INSTANCE(RoleRule)->getRoleAttackSize(roleId);
+	if (currentRoleDirection == RoleDirection_left)
+	{
+		return Rect(getPositionX() - size.width, getPositionY() - size.height/2,size.width, size.height);
+	}
+	else
+	{
+		return Rect(getPositionX(), getPositionY() - size.height/2,size.width, size.height);
+	}
+}
+Rect BaseRole::getHurtRect()
+{
+	//受伤区域就是整个人物了，坐标应该在人物左下角
+	auto size = INSTANCE(RoleRule)->getRoleHurtSize(roleId);
+	return Rect(getPositionX() - size.width/2, getPositionY() - size.height/2, size.width, size.height);
+}
