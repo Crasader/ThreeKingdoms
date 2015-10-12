@@ -1,5 +1,9 @@
 #include "FightManager.h"
 #include "UserData.h"
+#include "SceneRule.h"
+#include "tools/GameUtils.h"
+#include "SystemConfigRule.h"
+#include "NPCManager.h"
 
 bool FightManager::init()
 {
@@ -10,7 +14,16 @@ bool FightManager::init()
 
 void FightManager::enterFight()
 {
+	int sceneId = INSTANCE(UserData)->getCurrentSceneId();
+	selectBossId();
 
+	skillNpcVector = INSTANCE(SceneRule)->getSkillNpcId(sceneId);
+
+	//产生npc
+	Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(FightManager::createNpc),this,5.0f,false);
+
+	//npc动起来把
+	INSTANCE(NPCManager)->startUpdate();
 }
 void FightManager::exitFight()
 {
@@ -44,6 +57,37 @@ float FightManager::getAnger()
 BaseRole* FightManager::getRole()
 {
 	return INSTANCE(UserData)->getRole();
+}
+
+//是否攻击范围内
+bool FightManager::attackabel(Rect attackRect,Rect hurtRect)
+{
+	return attackRect.intersectsRect(hurtRect);
+}
+
+bool FightManager::npcCanAttackRole(NPC* npc)
+{
+	auto rR = getRole()->getHurtRect();
+	auto nR = npc->getAttackRect();
+	if (attackabel(nR,rR))
+	{
+		return true;
+	}
+	return false;
+}
+
+//npc攻击角色和释放技能
+void FightManager::npcAttack(NPC* npc)
+{
+	if (npcCanAttackRole(npc))
+	{
+		getRole()->playHurt(npc->getNpcAttackPenalty());
+	}
+}
+
+void FightManager::npcSkill(int skillId)
+{
+
 }
 
 void FightManager::roleSkill()
@@ -138,3 +182,48 @@ void FightManager::skill_30006()
 {
 
 }
+
+void FightManager::selectBossId()
+{
+	int sceneId = INSTANCE(UserData)->getCurrentSceneId();
+	if (bossVector.size() == 0)
+	{
+		bossVector = INSTANCE(SceneRule)->getSceneBossId(sceneId);
+	}
+
+	currentBossVector.clear();
+	int count = INSTANCE(SceneRule)->getSceneBossCount(sceneId);
+	//每组的第一个boss加入到当前boss组
+	for (int i = 0; i < count; i++)
+	{
+		currentBossVector.push_back(bossVector[0]);
+		bossVector.erase(bossVector.begin());
+	}
+}
+
+void FightManager::createNpc(float dt)
+{
+	Director::getInstance()->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(FightManager::createNpc),this);
+	//npc的数量
+	log("max:%d",INSTANCE(SystemConfigRule)->getSentTroopsMaxNumber());
+	log("min:%d",INSTANCE(SystemConfigRule)->getSentTroopsMinNumber());
+	int npcNum = INSTANCE(SystemConfigRule)->getSentTroopsMinNumber() + 
+		INSTANCE(GameUtils)->getRandom(INSTANCE(SystemConfigRule)->getSentTroopsMaxNumber() - INSTANCE(SystemConfigRule)->getSentTroopsMinNumber() + 1);
+	//时间间隔
+	int refreshTime = INSTANCE(SystemConfigRule)->getSendTroopsMinTime() +
+		INSTANCE(GameUtils)->getRandom(INSTANCE(SystemConfigRule)->getSendTroopsMaxTime() - INSTANCE(SystemConfigRule)->getSendTroopsMinTime() + 1);
+
+	int sceneId = INSTANCE(UserData)->getCurrentSceneId();
+	vector<int> npcIds = INSTANCE(SceneRule)->getNpcId(sceneId);
+	for (int i = 0; i < npcNum; i++)
+	{
+	  int npcId = INSTANCE(GameUtils)->getRandomFromVector(npcIds);
+	  INSTANCE(NPCManager)->createRandomNpc(npcId);
+	}
+	
+
+	Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(FightManager::createNpc),this,refreshTime,false);
+	//Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(FightManager::createNpc),this,5.0f,false);
+}
+
+

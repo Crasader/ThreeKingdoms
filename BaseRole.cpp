@@ -422,3 +422,24 @@ Rect BaseRole::getHurtRect()
 	auto size = INSTANCE(RoleRule)->getRoleHurtSize(roleId);
 	return Rect(getPositionX() - size.width/2, getPositionY() - size.height/2, size.width, size.height);
 }
+
+void BaseRole::playHurt(int attackPenalty)
+{
+	if (currentRoleStatus == RoleStatusHurt || currentRoleStatus == RoleStatusSkill)
+	{
+		return;
+	}
+	this->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(BaseRole::startAttack),this);
+	currentRoleStatus = RoleStatusHurt;
+	role->stopAllActions();
+	
+	auto animate = getAnimate(RoleStatusHurt);
+	auto action = Sequence::create(animate,DelayTime::create(0.1f),CallFuncN::create(CC_CALLBACK_0(BaseRole::hurtComplete,this)),nullptr);
+	role->runAction(action);
+}
+
+void BaseRole::hurtComplete()
+{
+	playStand();
+}
+

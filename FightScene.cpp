@@ -3,6 +3,8 @@
 #include "SceneRule.h"
 #include "UserData.h"
 #include "FightUI.h"
+#include "FightManager.h"
+#include "NPCManager.h"
 
 FightScene::FightScene()
 {
@@ -17,17 +19,21 @@ Scene* FightScene::createScene()
 	auto scene = Scene::create();
 	auto layer = FightScene::create();
 	scene->addChild(layer);
+	//INSTANCE(FightManager)->setFightScene(layer);
+	INSTANCE(NPCManager)->setFightScene(layer);
 	return scene;
 }
 
 void FightScene::onEnter()
 {
 	Layer::onEnter();
+	INSTANCE(FightManager)->enterFight();
 }
 
 void FightScene::onExit()
 {
 	Layer::onExit();
+	INSTANCE(FightManager)->exitFight();
 }
 
 bool FightScene::init()

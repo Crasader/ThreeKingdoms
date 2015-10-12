@@ -30,11 +30,24 @@ int GameUtils::getRandomFromVector(vector<vector<float>> param)
 	return 1;
 }
 
+bool GameUtils::getRandomFromFloat(float param)
+{
+	default_random_engine e(time(0));
+	uniform_real_distribution<float> f(0,10);
+	float r = f(e);
+	float probability = param * 10.0f;
+	if (r <= probability)
+	{
+		return true;
+	}
+	return false;
+}
+
 int GameUtils::getRandomFromVector(vector<int> param)
 {
+	default_random_engine e(time(0));
 	//生成均匀分布的随机数(0~param.size())
-	uniform_int_distribution<unsigned> u(0,param.size());
-	default_random_engine e;
+	uniform_int_distribution<unsigned> u(0,param.size() - 1);
 	int r = u(e);
 	return param[r];
 }

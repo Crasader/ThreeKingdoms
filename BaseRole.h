@@ -27,6 +27,8 @@ public:
 
 	//技能消耗怒气值
 	int getSkillCost();
+
+	void playHurt(int attackPenalty);
 private:
 	int roleId;
 	float speedX;
@@ -57,6 +59,8 @@ private:
 	void attackComplete();
 	void startAttack(float dt);
 	void allowNextAttack(float dt);
+
+	void hurtComplete();
 	//角色攻击次数
 	int getAttackMultiple();
 

@@ -25,6 +25,8 @@ public:
 
 	int getRandom(int size);
 
+	bool getRandomFromFloat(float param);
+
 	int getRandomFromVector(vector<vector<float>> param);
 	//Æ½¾ù¸ÅÂÊ
 	int getRandomFromVector(vector<int> param);

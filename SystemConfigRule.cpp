@@ -113,7 +113,7 @@ int SystemConfigRule::getSentTroopsMinNumber()
 //出兵数量最大值
 int SystemConfigRule::getSentTroopsMaxNumber()
 {
-	return Value(getSystemAttribute("sentTroopsMaxNumber")).asInt();
+	return Value(getSystemAttribute("sentTroopsManNumber")).asInt();
 }
 
 //在线奖励

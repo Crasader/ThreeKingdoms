@@ -1,5 +1,6 @@
 #include "UserData.h"
 #include "BaseDataManager.h"
+#include "SceneRule.h"
 
 bool UserData::init()
 {
@@ -37,7 +38,7 @@ void UserData::reloadData()
 		UserDefault::getInstance()->setIntegerForKey("SkillNum",0);
 		UserDefault::getInstance()->setIntegerForKey("Vip",0);
 		UserDefault::getInstance()->setStringForKey("Roles","20001_20002_20003");
-		UserDefault::getInstance()->setStringForKey("ChapterStatus","");
+		UserDefault::getInstance()->setStringForKey("ChapterStatus","0");
 		UserDefault::getInstance()->setIntegerForKey("WheelTimes",5);
 		UserDefault::getInstance()->setIntegerForKey("FinishChapterTimes",0);
 		UserDefault::getInstance()->setIntegerForKey("PotGold",1000);
@@ -61,6 +62,10 @@ void UserData::reloadData()
 	vipLevel =						UserDefault::getInstance()->getIntegerForKey("Vip");
 	roles =							UserDefault::getInstance()->getStringForKey("Roles");
 	chapterStatus =					UserDefault::getInstance()->getStringForKey("ChapterStatus");
+	if (chapterStatus == "0")
+	{
+		chapterStatus = "";
+	}
 	wheelTimes =					UserDefault::getInstance()->getIntegerForKey("WheelTimes");
 	finishChapterTimes =			UserDefault::getInstance()->getIntegerForKey("FinishChapterTimes");
 	currentPotGold =				UserDefault::getInstance()->getIntegerForKey("PotGold");
@@ -223,10 +228,63 @@ void UserData::addRole(int roleId)
 
 void UserData::setChapterStatus(int chapterId,int bossId)
 {
-	INSTANCE(BaseDataManager)->split(chapterStatus,"_");
+	//INSTANCE(BaseDataManager)->split(chapterStatus,"_");
+	vector<int> sceneVec = INSTANCE(SceneRule)->getAllSceneId();
+	//vector<int> bossIdVec = INSTANCE(SceneRule)->getSceneBossId(chapterId);
+	map<int, vector<int> > tempM;
+	for (auto& sId : sceneVec)
+	{
+		tempM[sId] = INSTANCE(SceneRule)->getSceneBossId(sId);
+	}
+	//返回指向关键字为chapterid的元素，如果chapterid不在容器中，则返回尾后迭代器 end()
+	map<int, vector<int> >::iterator it = tempM.find(chapterId);
+	if (it != tempM.end())
+	{
+		it->second[0] = bossId;
+	}
+	else
+	{
+		vector<int> t;
+		t.push_back(bossId);
+		tempM[chapterId] = t;
+	}
+	//再将map转换成string
+	string result("");
+	for (map<int,vector<int>>::iterator it = tempM.begin();it != tempM.end();it++)
+	{
+		string resultT("");
+		vector<int> t = it->second;
+		for (auto& id : t)
+		{
+			resultT.append(Value(id).asString());
+		}
+		if (it == tempM.begin())
+		{
+			result.append(resultT);
+		}
+		else
+		{
+			result.append("|"+resultT);
+		}
+	}
+	//他们的格式是：
+	//BossID1_BossID2_BossID3|BossID1_BossID2_BossID3|BossID1_BossID2_BossID3
+	chapterStatus = result;
 }
 int UserData::getChapterStatus(int chapterId)
 {
+	map<int,vector<string>> result;
+	vector<string> chapterIds = INSTANCE(BaseDataManager)->split(chapterStatus,"|");
+	for (int i=0;i<chapterIds.size();i++)
+	{
+		vector<string> bossIds = INSTANCE(BaseDataManager)->split(chapterIds[i],"_");
+		result[i] = bossIds;
+	}
+	map<int, vector<string> >::iterator it = result.find(chapterId);
+	if (it != result.end())
+	{
+		return Value(it->second[0]).asInt();
+	}
 	return 0;
 }
 
