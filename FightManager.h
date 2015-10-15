@@ -15,6 +15,13 @@ using namespace std;
 //清屏时npc逃离系数
 #define ClearNpcSpeedCoefficient 4
 
+//消息名称
+#define NoticeUpdateMoney "noticeUpdateMoney"
+#define NoticeUpdateIntegral "noticeUpdateIntegral"
+#define NoticeUpdatePot "noticeUpdatePot"
+
+#define NoticeSkillShake "noticeSkillShake"
+
 class FightManager:public Ref
 {
 public:

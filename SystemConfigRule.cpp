@@ -195,12 +195,12 @@ int SystemConfigRule::getWheelMultiple()
 //获取彩金
 int SystemConfigRule::getTreasureBowlWinnings(int times)
 {
-	return Value(getTreasureBowlAttibute(times,"goldCost")).asInt();
+	return Value(getTreasureBowlAttibute(times,"winnings")).asInt();
 }
 //获取元宝消耗
 int SystemConfigRule::getTreasureBowlGoldCost(int times)
 {
-	return Value(getTreasureBowlAttibute(times,"winnings")).asInt();
+	return Value(getTreasureBowlAttibute(times,"goldCost")).asInt();
 }
 
 //获取当前元宝消耗

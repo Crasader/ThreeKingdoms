@@ -1,5 +1,6 @@
 #include "CommonMoneyBar.h"
 #include "tools/GameUtils.h"
+#include "UserData.h"
 
 CommonMoneyBar::CommonMoneyBar()
 {
@@ -34,14 +35,16 @@ void CommonMoneyBar::initContent()
 	moneyBar->setType(ProgressTimer::Type::BAR);
 	moneyBar->setBarChangeRate(Vec2(1,0));
 	moneyBar->setMidpoint(Vec2::ZERO);
-	moneyBar->setPercentage(30.0f);
+	//moneyBar->setPercentage(30.0f);
+	moneyBar->setPercentage(static_cast<float>(INSTANCE(UserData)->getCurrentMoney()) / 9999 * 100);
 
 	auto ink2 = Sprite::createWithSpriteFrameName("common_ink.png");
 	frame_2->addChild(ink2);
 	ink2->setPosition(Vec2(10,frame_2->getContentSize().height/2));
 
 //ToDo label 要好好用用!!!??
-	moneyLabel = Label::createWithBMFont("fonts/futura-48.fnt", "677");
+	//moneyLabel = Label::createWithBMFont("fonts/futura-48.fnt", "677");
+	moneyLabel = Label::createWithBMFont("font/font_yellowNum.fnt", Value(INSTANCE(UserData)->getCurrentMoney()).asString());
 	frame_2->addChild(moneyLabel);
 	moneyLabel->setPosition(INSTANCE(GameUtils)->getNodeCenterPosition(frame_2)+Vec2(0,-8));
 
@@ -53,7 +56,9 @@ void CommonMoneyBar::initContent()
 }
 void CommonMoneyBar::updateBar()
 {
-	moneyBar->setPercentage(90.0f);
-	moneyLabel->setString("999");
+	//moneyBar->setPercentage(90.0f);
+	//moneyLabel->setString("999");
+	moneyBar->setPercentage(static_cast<float>(INSTANCE(UserData)->getCurrentMoney()) / 9999 * 100);
+	moneyLabel->setString(Value(INSTANCE(UserData)->getCurrentMoney()).asString());
 }
 

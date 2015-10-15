@@ -23,6 +23,8 @@ bool UserData::isHaveSaveFile()
 //读取存档
 void UserData::reloadData()
 {
+	//打印保存的位置
+	log("xxxxxxxxxxxx,%s",FileUtils::getInstance()->getWritablePath().c_str());
 	if (!isHaveSaveFile())
 	{
 		UserDefault::getInstance()->setIntegerForKey("Gold",0);
@@ -40,7 +42,7 @@ void UserData::reloadData()
 		UserDefault::getInstance()->setStringForKey("Roles","20001_20002_20003");
 		UserDefault::getInstance()->setStringForKey("ChapterStatus","0");
 		UserDefault::getInstance()->setIntegerForKey("WheelTimes",5);
-		UserDefault::getInstance()->setIntegerForKey("FinishChapterTimes",0);
+		UserDefault::getInstance()->setIntegerForKey("FinishChapterTimes",1);//1~20
 		UserDefault::getInstance()->setIntegerForKey("PotGold",1000);
 		UserDefault::getInstance()->setIntegerForKey("ReceiveOnlineRewardTimes",3);
 		UserDefault::getInstance()->setIntegerForKey("TaskCount",6);

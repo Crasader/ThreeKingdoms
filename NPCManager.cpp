@@ -28,9 +28,12 @@ void NPCManager::createRandomNpc(int npcId,bool isBoss)
 		return;
 	}
 	//生成0~1的随机无符号随机数
-	default_random_engine e;
+	default_random_engine e(time(0));
 	uniform_real_distribution<float> u(0,1);
-	RoleDirection direction = u(e) > 0.5f ? RoleDirection_left : RoleDirection_right;
+	float randomNum = u(e);
+	log("randomNum:%f",randomNum);
+	//RoleDirection direction = u(e) > 0.5f ? RoleDirection_left : RoleDirection_right;
+	RoleDirection direction = randomNum > 0.5f ? RoleDirection_left : RoleDirection_right;
 	int speed = INSTANCE(NPCRule)->getNpcSpeed(npcId);
 	//随机一个阵法
 	int index = INSTANCE(GameUtils)->getRandom(5);
@@ -39,7 +42,7 @@ void NPCManager::createRandomNpc(int npcId,bool isBoss)
 	npc->setPosition(getNPCPosition(index,direction));
 	//npc->setPosition(100.0f,100.0f);
 	npcArray.pushBack(npc);
-	getFightScene()->addChild(npc);
+	getFightScene()->addNpcToScene(npc);
 }
 
 void NPCManager::removeNPC(NPC *npc)
